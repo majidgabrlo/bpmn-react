@@ -1,0 +1,7 @@
+.bjs-container {
+  display: none;
+}
+
+.bjs-container:last-child {
+  display: block;
+}

@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import BpmnModeler from "bpmn-js/lib/Modeler";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-font/dist/css/bpmn-embedded.css";
@@ -7,15 +6,16 @@ import propertiesProviderModule from "bpmn-js-properties-panel/lib/provider/camu
 import camundaModdleDescriptor from "camunda-bpmn-moddle/resources/camunda";
 import "bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css";
 import "./bpmn.css";
+import { useEffect } from "react";
 
 const emptyBpmn = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"><bpmn2:process id="Process_191t89p" /><bpmndi:BPMNDiagram id="BPMNDiagram_1"><bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_191t89p" /></bpmndi:BPMNDiagram></bpmn2:definitions>`;
 
-class Bpmn extends Component {
-  modeler = null;
+let modeler = null;
 
-  componentDidMount = () => {
-    this.modeler = new BpmnModeler({
+function Bpmn2() {
+  useEffect(() => {
+    modeler = new BpmnModeler({
       container: "#bpmnview",
       keyboard: {
         bindTo: window,
@@ -29,15 +29,15 @@ class Bpmn extends Component {
       },
     });
 
-    this.newBpmnDiagram();
+    newBpmnDiagram();
+  },);
+
+  const newBpmnDiagram = () => {
+    openBpmnDiagram(localStorage.getItem("sen") || emptyBpmn);
   };
 
-  newBpmnDiagram = () => {
-    this.openBpmnDiagram(localStorage.getItem("sen") || emptyBpmn);
-  };
-
-  openBpmnDiagram = (xml) => {
-    this.modeler.importXML(xml, (error) => {
+  const openBpmnDiagram = (xml) => {
+    modeler.importXML(xml, (error) => {
       if (error) {
         return console.log("fail import xml");
       }
@@ -48,33 +48,31 @@ class Bpmn extends Component {
     });
   };
 
-  saveBpmnDiagram = () => {
-    this.modeler.saveXML().then((xml) => localStorage.setItem("sen", xml.xml));
+  const saveBpmnDiagram = () => {
+    modeler.saveXML().then((xml) => localStorage.setItem("sen", xml.xml));
   };
 
-  render = () => {
-    return (
-      <>
-        <div id="bpmncontainer">
-          <div
-            id="propview"
-            style={{
-              width: "25%",
-              height: "98vh",
-              float: "right",
-              maxHeight: "98vh",
-              overflowX: "auto",
-            }}
-          ></div>
-          <div
-            id="bpmnview"
-            style={{ width: "75%", height: "98vh", float: "left" }}
-          ></div>
-        </div>
-        <button onClick={this.saveBpmnDiagram}>Save</button>
-      </>
-    );
-  };
+  return (
+    <>
+      <div id="bpmncontainer">
+        <div
+          id="propview"
+          style={{
+            width: "25%",
+            height: "98vh",
+            float: "right",
+            maxHeight: "98vh",
+            overflowX: "auto",
+          }}
+        ></div>
+        <div
+          id="bpmnview"
+          style={{ width: "75%", height: "98vh", float: "left" }}
+        ></div>
+      </div>
+      <button onClick={saveBpmnDiagram}>Save</button>
+    </>
+  );
 }
 
-export default Bpmn;
+export default Bpmn2;

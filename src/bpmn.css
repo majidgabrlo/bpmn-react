@@ -1,7 +1,7 @@
-.bjs-container {
+.bjs-container,.bpp-properties-panel {
   display: none;
 }
 
-.bjs-container:last-child {
+.bjs-container:last-child,.bpp-properties-panel:last-child {
   display: block;
 }

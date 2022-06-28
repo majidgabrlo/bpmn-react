@@ -1,5 +1,5 @@
 import React from 'react'
-import Bpmn from './Bpmn'
+import Bpmn from './Bpmn2'
 
 function App() {
   return (
